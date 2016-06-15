@@ -1,37 +1,28 @@
-var m = require('mithril'),
-    extend = require('./util/extend'),
+var extend = require('./util/extend'),
     Dispatcher = require('./Dispatcher')
-
-var baseDispatcher = new Dispatcher
 
 var Store = function (params, dispatcher) {
     var self = this,
         params = params || {},
-        actions = params.actions || {},
         data = params.data || null
 
-    if (typeof dispatcher === 'undefined') dispatcher = baseDispatcher
+    if (params.actions) this.actions = params.actions
 
-    if (this.initialize) this.initialize.apply(this, arguments)
+    if (typeof dispatcher === 'undefined') dispatcher = new Dispatcher()
 
     this.dispatcher = dispatcher
 
-    this.data = m.prop(data)
+    this.data = data
 
     this.dispatchIndex = dispatcher.register(function (payload) {
 
-        Object.keys(actions).some(function (actionName) {
-
-            if (payload.action === actionName) {
-                actions[actionName].call(self, payload)
-                return true
-            } else {
-                return false
-            }
-
-        })
+        if (self.actions[payload.action]) {
+            self.actions[payload.action].call(self, payload)
+        }
 
     })
+
+    if (this.initialize) this.initialize.apply(this, arguments)
 
 }
 

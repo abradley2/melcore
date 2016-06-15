@@ -1,6 +1,5 @@
 var assign = require('./assign')
 
-
 // Subclassing function based on Backbone's
 // http://backbonejs.org/docs/backbone.html#section-247
 // and the classical inheritance pattern shown in this MDN section

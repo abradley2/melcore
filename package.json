@@ -9,9 +9,6 @@
     "mithril": "latest",
     "mocha": "^2.5.3"
   },
-  "peerDependencies": {
-    "mithril": "0.x"
-  },
   "scripts": {
     "test": "mocha"
   },
