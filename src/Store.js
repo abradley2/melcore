@@ -5,7 +5,8 @@ var m = require('mithril'),
 var baseDispatcher = new Dispatcher
 
 var Store = function (params, dispatcher) {
-    var params = params || {},
+    var self = this,
+        params = params || {},
         actions = params.actions || {},
         data = params.data || null
 
@@ -22,13 +23,13 @@ var Store = function (params, dispatcher) {
         Object.keys(actions).some(function (actionName) {
 
             if (payload.action === actionName) {
-                actions[actionName].call(this, payload)
+                actions[actionName].call(self, payload)
                 return true
             } else {
                 return false
             }
 
-        }, this)
+        })
 
     })
 

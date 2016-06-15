@@ -26,12 +26,12 @@ describe('DataStore', function () {
         chai.assert.ok(dataStore)
 
 
-        dataStore.dispatch({
+        dataStore.dispatcher.dispatch({
             action: 'REMOVE_TASK',
-
+            index: dataStore.data()[0]
         })
 
-        console.log(dataStore)
+        console.log(dataStore.data())
 
     })
 
