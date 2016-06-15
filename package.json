@@ -1,0 +1,32 @@
+{
+  "name": "melkor",
+  "version": "1.0.0",
+  "description": "Simple Flux pattern-utils for Mithril.js",
+  "main": "index.js",
+  "dependencies": {},
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mithril": "latest",
+    "mocha": "^2.5.3"
+  },
+  "peerDependencies": {
+    "mithril": "0.x"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/abradley2/melkor.git"
+  },
+  "keywords": [
+    "mithril",
+    "flux"
+  ],
+  "author": "Tony Bradley",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/abradley2/melkor/issues"
+  },
+  "homepage": "https://github.com/abradley2/melkor#readme"
+}
