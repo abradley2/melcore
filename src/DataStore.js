@@ -4,5 +4,17 @@ var m = require('mithril'),
     Store = require('./Store')
 
 var DataStore = Store.extend({
-    
+
+    constructor: function (params, dispatcher) {
+        this.__super__.constructor(params, dispatcher)
+    }
+
 })
+
+DataStore.extend = extend
+
+assign(DataStore.prototype, {
+
+})
+
+module.exports = DataStore

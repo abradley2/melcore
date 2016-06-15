@@ -5,12 +5,15 @@ var m = require('mithril'),
 var baseDispatcher = new Dispatcher
 
 var Store = function (params, dispatcher) {
-    var actions = params.actions || {},
+    var params = params || {},
+        actions = params.actions || {},
         data = params.data || null
 
     if (typeof dispatcher === 'undefined') dispatcher = baseDispatcher
 
     if (this.initialize) this.initialize.apply(this, arguments)
+
+    this.dispatcher = dispatcher
 
     this.data = m.prop(data)
 
