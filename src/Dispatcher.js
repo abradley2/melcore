@@ -1,11 +1,14 @@
 var m = require('mithril'),
-    assign = require('./util/assign')
+    assign = require('./util/assign'),
+    extend = require('./util/extend')
 
-function Dispatcher () {
+var Dispatcher = function () {
     
     this.callbacks = []
 
 }
+
+Dispatcher.extend = extend
 
 assign(Dispatcher.prototype, {
 
