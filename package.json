@@ -1,13 +1,17 @@
 {
   "name": "melkor",
   "version": "1.0.0",
-  "description": "Simple Flux pattern-utils for Mithril.js",
-  "main": "index.js",
+  "description": "Simple 'Redux-ish' utilities for Mithril",
+  "main": "./lib/melkor.js",
   "dependencies": {},
   "devDependencies": {
     "chai": "^3.5.0",
     "mithril": "latest",
-    "mocha": "^2.5.3"
+    "mocha": "^2.5.3",
+    "sinon": "^1.17.6"
+  },
+  "peerDependencies": {
+    "mithril": "*"
   },
   "scripts": {
     "test": "mocha"
@@ -18,7 +22,7 @@
   },
   "keywords": [
     "mithril",
-    "flux"
+    "redux"
   ],
   "author": "Tony Bradley",
   "license": "MIT",
