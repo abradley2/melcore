@@ -1,104 +1,59 @@
 # Melkor
 
-Simple Flux architecture utils for Mithril.js
+Minimal Redux-ish implementation for Mithril.js, with middleware for handling asynchronous request via `m.request`
 
-### Simple example
+# The Store
 
-**Create a Dispatcher**
+# Actions and Action Creators
 
-```
-var myDispatcher = new Dispatcher()
-```
+# Reducers
 
-**Create a Store**
-Stores hold data and actions. When creating a store,
-the first argument is an object which contains
-its action dictionary and a reference to its data.
+# Requests
 
-The second argument is the dispatcher the store will register with.
+Any action that has a `request` attribute will trigger a call on `m.request`, passing its content 
+
+
+So when you dispatch an action with these contents:
 
 ```
-var todos = m.prop([
-    {title: 'do laundry', completed: false},
-    {title: 'write code', completed: true}
-])
-
-var todoStore = new Store({
-    data: todos,
-    actions: {
-        'ADD_TODO': function (payload) {
-            this.data().push(payload.todo)
-        }
-    }
-}, myDispatcher)
-```
-
-Then use the dispatcher:
-
-```
-myDispatcher.dispatch({
-    action: 'ADD_TODO',
-    todo: {title: 'New todo', completed: false}
-})
-```
-
-All stores that use the dispatcher will then fire an action
-with a name matching the payload's 'action' parameter. It will
-then pass the payload as that function's argument
-
-You should generally create handlers on your dispatcher so it can respond
-to UI events appropriately to all related stores. This is especially helpful
-since single actions often affect multiple stores.
-
-```
-myDispatcher.handleRemoveTodo = function (removed) {
-
-    this.dispatch({
-        action: 'REMOVE_TODO',
-        todo: removed
-    })
-
-    this.dispatch({
-        action: 'REMOVE_SUB_TODOS',
-        parentTodo: removed
-    })
-
+{
+  type: 'FETCH_TODOS',
+  request: {
+    method: 'GET',
+    url: '/api/todos'
+  }
 }
 ```
 
-### Other stuff
+another action will automaticall be dispatched when the request is finished. 
 
-If you do not pass in a dispatcher as the second argument to a store,
-it will default to using it's own internal dispatcher created in its
-constructor.
-
-A store's associated dispatcher is accessible in its dispatcher attribute.
-
+If the request finishes (promise.then)
 ```
-var myStore = new Store({
-    data: m.prop([]),
-    actions: {
-        'DO_STUFF': function (payload) { ... }
-    }
-})
-
-var dispatcher = myStore.dispatcher
-
-dispatcher.dispatch({
-    action: 'DO_STUFF',
-    stuff: { ... }
-})
+{
+  type: 'FETCH_TODOS',
+  status: 'done',
+  request: {
+    method: 'GET',
+    url: '/api/todos'
+  },
+  response: [
+    {id: 1, title: 'Todo One'},
+    {id: 2, title: 'Todo Two'}
+  ]
+}
 ```
 
-Store's will call their initialize function when constructed
-if it is defined.
-
+else (promise.catch)
 ```
-var CustomStore = Store.extend({
-    initialize: function (params) {
-        console.log(this, params)
-    }
-})
-
-var store = new CustomStore({ ... })
+{
+  type: 'FETCH_TODOS',
+  status: 'error',
+  request: {
+    method: 'GET',
+    url: '/api/todos'
+  },
+  response: {
+    error: new Error( ... )
+  }
+}
 ```
