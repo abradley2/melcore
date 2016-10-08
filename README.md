@@ -2,6 +2,13 @@
 
 Minimal Redux-ish implementation for Mithril.js, with middleware for handling asynchronous request via `m.request`
 
+I really just wanted a library like Redux, with a built in middleware for handling 
+requests using `m.request`, 
+and a nicer way to write reducers so it won't fail quietly when one of my 
+constants are mistyped. Other than those couple of reasons, this may as well
+be titled "Discount knockoff-Redux". But "Melkor" sounds kewler and this with 
+the "Mithril" theme I guess.
+
 # The Store
 
 # Actions and Action Creators
