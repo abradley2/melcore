@@ -1,5 +1,6 @@
 var melkor = require('../../lib/melkor')
-var setupReducer = require('../../lib/melkor').setupReducer
+var setupReducer = melkor.setupReducer
+var checkTypes = melkor.checkTypes
 var clone = melkor.clone
 
 var constants = require('./constants')
@@ -8,16 +9,22 @@ var NameActions = constants.NameActions
 
 exports.count = setupReducer()
 	.on(CountActions.INCREMENT, function (oldState, payload) {
-		var newState = clone(oldState)
+		checkTypes({
+			number: Number
+		})
 
-		newState.number = oldState.number + 1
-		return newState
+		return cloneWithProps(oldState, {
+			number: oldState.number + 1
+		})
 	})
 	.on(CountActions.DECREMENT, function (oldState, payload) {
-		var newState = clone(oldState)
+		checkTypes({
+			number: Number
+		})
 
-		newState.number = oldState.number - 1]
-		return newState
+		return cloneWithProps(oldState, {
+			number: oldState.number - 1
+		})
 	})
 	.create()
 
