@@ -1,12 +1,13 @@
 # Melkor
 
-Minimal Redux-ish implementation for Mithril.js, with middleware for handling asynchronous request via `m.request`
+Minimal Redux-ish implementation for Mithril.js, with middleware
+for handling asynchronous request via `m.request`
 
 I really just wanted a library like Redux, with a built in middleware for handling
 requests using `m.request`,
 and a nicer way to write reducers so it won't fail quietly when one of my
 constants are mistyped. Other than those couple of reasons, this may as well
-be titled "Discount knockoff-Redux". But "Melkor" sounds kewler and this with
+be titled "Discount knockoff-Redux". But "Melkor" sounds kewler and this fits with
 the "Mithril" theme I guess.
 
 # The Store
@@ -16,12 +17,15 @@ and registered reducers that divide the responsibilities of creating a new
 state with every action based of the previous state.
 
 ```
-var createStore = require('melkor').createStore
+var setupStore = require('melkor').setupStore
 
-var store = createStore({
-	todos: {},
-	count: 1
+var store = setupStore({
+	'todos': {},
+	'count': 1
 })
+	.addReducer( 'todos', require('./reducers/todos') )
+	.addReducer( 'count', require('./reducers/counts') )
+	.create()
 ```
 
 # Reducers
@@ -30,7 +34,7 @@ Reducers are done in such a way that they will not fail silently if
 you try to respond to an undefined action type.
 
 ```
-var setupReducer = require('melkor').reducer
+var setupReducer = require('melkor').setupReducer
 var constants = require('./constants')
 
 var todos = setupReducer()
@@ -41,8 +45,46 @@ var todos = setupReducer()
 		...
 	})
 	.create()
+
+module.exports = todos
 ```
 
+# Action Creators
+
+
+```
+var bindActionCreators = require('melkor').bindActionCreators
+var constants = require('./constants')
+var store = require('./store')
+
+var module = {
+	controller: function () {
+		return bindActionCreators({
+			increment: function (e) {
+				return {
+					type: constants.INCREMENT
+				}
+			},
+			decrement: function (e) {
+				return {
+					type: constants.DECREMENT
+				}
+			}
+		}, store)
+	},
+	view: function () {
+		var state = store.getState()
+
+		return m('div', [
+			m('h3', state.count),
+			m('button', { onclick: ctrl.increment }, '+'),
+			m('button', { onclick: ctrl.decrement }, '-')
+		])
+	}
+}
+
+
+```
 
 # Requests
 
@@ -61,7 +103,7 @@ So when you dispatch an action with these contents:
 }
 ```
 
-another action will automaticall be dispatched when the request is finished.
+Another action will automatically be dispatched when the request is finished.
 
 If the request finishes (promise.then)
 ```

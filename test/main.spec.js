@@ -52,7 +52,6 @@ describe('melkor', function () {
 	it('should dispatch action when bound creator called', function () {
 		var actions = melkor.bindActionCreators({
 			create: function (name) {
-				console.log('CREATE: ',name)
 				return {
 					type: NameActions.ADD_NAME,
 					name: name
@@ -61,8 +60,6 @@ describe('melkor', function () {
 		}, store)
 
 		actions.create('Tony')
-
-		console.log(store.getState())
 
 		var names = store.getState().names
 
