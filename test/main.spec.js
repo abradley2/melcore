@@ -2,41 +2,21 @@ var chai = require('chai')
 var sinon = require('sinon')
 
 var melkor = require('../lib/melkor')
-
+var constants = require('./sut/constants')
+var reducers = require('./sut/reducers')
+var NameActions = constants.NameActions
+var CountActions = constants.CountActions
 
 describe('melkor', function () {
 	var store
-	var createTodo
-	var updateTodo
-	var removeTodo
 
 	beforeEach(function () {
-		createTodo = sinon.spy()
-		updateTodo = sinon.spy()
-		removeTodo = sinon.spy()
 
 		store = melkor.createStore({
 
-			todos: function (state, payload) {
-				switch (payload.type) {
-					case 'CREATE_TODO':
-						createTodo(payload)
-						return state
+			names: reducers.names,
+			count: reducers.count
 
-					case 'UPDATE_TODO':
-						updateTodo(payload)
-						return state
-
-					case 'REMOVE_TODO':
-						removeTodo(payload)
-						return state
-
-					default:
-						return state
-				}
-
-			}
-		
 		})
 	})
 
@@ -69,19 +49,24 @@ describe('melkor', function () {
 	})
 
 	it('should dispatch action when bound creator called', function () {
-		var todoActions = melkor.bindActionCreators({
-			create: function () {
+		var actions = melkor.bindActionCreators({
+			create: function (name) {
 				return {
-					type: 'CREATE_TODO'
+					type: NameActions.ADD_NAME,
+					name: name
 				}
 			}
 		}, store)
 
-		todoActions.create()
+		actions.create('Tony')
 
-		chai.assert.isTrue(createTodo.calledOnce)
-		chai.assert.isFalse(updateTodo.calledOnce)
-		chai.assert.isFalse(removeTodo.calledOnce)
+		console.log(store.getState())
+
+		var names = store.getState().names
+
+		chai.assert.equal(names[names.length - 1], 'Tony')
 	})
+
+
 
 })
