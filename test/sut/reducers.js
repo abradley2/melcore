@@ -20,21 +20,39 @@ exports.count = setupReducer()
 	})
 	.create()
 
-exports.name = setupReducer()
+exports.names = setupReducer()
 	.on(NameActions.ADD_NAME, function (oldState, action) {
+		var newState = clone(oldState)
+
 		checkTypes(action, {
 			name: String
 		})
+
+		newState.push(action.name)
+
+		return newState
 	})
 	.on(NameActions.EDIT_NAME, function (oldState, action) {
+		var newState = clone(oldState)
+
 		checkTypes(action, {
 			idx: Number,
 			name: String
 		})
+
+		newState[action.idx] = action.name
+
+		return newState
 	})
 	.on(NameActions.REMOVE_NAME, function (oldState, action) {
+		var newState = clone(oldState)
+
 		checkTypes(action, {
 			idx: Number
 		})
+
+		newState.splice(action.idx, 1)
+
+		return newState
 	})
 	.create()

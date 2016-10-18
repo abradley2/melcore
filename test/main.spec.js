@@ -12,12 +12,13 @@ describe('melkor', function () {
 
 	beforeEach(function () {
 
-		store = melkor.createStore({
-
-			names: reducers.names,
-			count: reducers.count
-
+		store = melkor.setupStore({
+			count: 0,
+			names: []
 		})
+			.addReducer('names', reducers.names)
+			.addReducer('count', reducers.count)
+			.create()
 	})
 
 	it('should create a store', function () {
@@ -27,30 +28,31 @@ describe('melkor', function () {
 	})
 
 	it('should be able to bind action creators', function () {
-		var todoActions = melkor.bindActionCreators({
-			create: function () {
+		var actions = melkor.bindActionCreators({
+			add: function () {
 				return {
-					type: 'CREATE_TODO'
+					type: NameActions.ADD_NAME
 				}
 			},
-			update: function () {
+			edit: function () {
 				return {
-					type: 'UPDATE_TODO'
+					type: NameActions.EDIT_NAME
 				}
 			},
 			remove: function () {
 				return {
-					type: 'REMOVE_TODO'
+					type: NameActions.REMOVE_NAME
 				}
 			}
 		}, store)
 
-		chai.assert.ok(todoActions)
+		chai.assert.ok(actions)
 	})
 
 	it('should dispatch action when bound creator called', function () {
 		var actions = melkor.bindActionCreators({
 			create: function (name) {
+				console.log('CREATE: ',name)
 				return {
 					type: NameActions.ADD_NAME,
 					name: name
