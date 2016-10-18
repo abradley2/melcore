@@ -1,5 +1,6 @@
 var melkor = require('../../lib/melkor')
-var setupReducer = require('../../lib/melkor').setupReducer
+var setupReducer = melkor.setupReducer
+var checkTypes = melkor.checkTypes
 var clone = melkor.clone
 var checkTypes = melkor.checkTypes
 
