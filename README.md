@@ -51,6 +51,8 @@ module.exports = todos
 
 # Action Creators
 
+**"type", "request", "status", and "response"** are all special
+action attributes.
 
 ```
 var bindActionCreators = require('melkor').bindActionCreators
