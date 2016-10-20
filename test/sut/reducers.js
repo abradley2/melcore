@@ -1,8 +1,8 @@
-var melkor = require('../../lib/melkor')
-var setupReducer = melkor.setupReducer
-var checkTypes = melkor.checkTypes
-var clone = melkor.clone
-var checkTypes = melkor.checkTypes
+var melcore = require('../../lib/melcore')
+var setupReducer = melcore.setupReducer
+var checkTypes = melcore.checkTypes
+var clone = melcore.clone
+var checkTypes = melcore.checkTypes
 
 var constants = require('./constants')
 var CountActions = constants.CountActions

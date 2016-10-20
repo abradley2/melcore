@@ -1,18 +1,18 @@
 var chai = require('chai')
 var sinon = require('sinon')
 
-var melkor = require('../lib/melkor')
+var melcore = require('../lib/melcore')
 var constants = require('./sut/constants')
 var reducers = require('./sut/reducers')
 var NameActions = constants.NameActions
 var CountActions = constants.CountActions
 
-describe('melkor', function () {
+describe('melcore', function () {
 	var store
 
 	beforeEach(function () {
 
-		store = melkor.setupStore({
+		store = melcore.setupStore({
 			count: 0,
 			names: []
 		})
@@ -28,7 +28,7 @@ describe('melkor', function () {
 	})
 
 	it('should be able to bind action creators', function () {
-		var actions = melkor.bindActionCreators({
+		var actions = melcore.bindActionCreators({
 			add: function () {
 				return {
 					type: NameActions.ADD_NAME
@@ -50,7 +50,7 @@ describe('melkor', function () {
 	})
 
 	it('should dispatch action when bound creator called', function () {
-		var actions = melkor.bindActionCreators({
+		var actions = melcore.bindActionCreators({
 			create: function (name) {
 				return {
 					type: NameActions.ADD_NAME,

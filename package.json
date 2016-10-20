@@ -1,8 +1,8 @@
 {
-  "name": "melkor",
+  "name": "melcore",
   "version": "1.0.0",
   "description": "Simple 'Redux-ish' utilities for Mithril",
-  "main": "./lib/melkor.js",
+  "main": "./lib/melcore.js",
   "dependencies": {},
   "devDependencies": {
     "chai": "^3.5.0",
@@ -18,7 +18,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/abradley2/melkor.git"
+    "url": "git+https://github.com/abradley2/melcore.git"
   },
   "keywords": [
     "mithril",
@@ -27,7 +27,7 @@
   "author": "Tony Bradley",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/abradley2/melkor/issues"
+    "url": "https://github.com/abradley2/melcore/issues"
   },
-  "homepage": "https://github.com/abradley2/melkor#readme"
+  "homepage": "https://github.com/abradley2/melcore#readme"
 }

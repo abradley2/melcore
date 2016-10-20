@@ -1,4 +1,4 @@
-# Melkor
+# Melcore
 
 Minimal Redux-ish implementation for Mithril.js, with middleware
 for handling asynchronous request via `m.request`
@@ -7,7 +7,7 @@ I really just wanted a library like Redux, with a built in middleware for handli
 requests using `m.request`,
 and a nicer way to write reducers so it won't fail quietly when one of my
 constants are mistyped. Other than those couple of reasons, this may as well
-be titled "Discount knockoff-Redux". But "Melkor" sounds kewler and this fits with
+be titled "Discount knockoff-Redux". But "Melcore" sounds kewler and this fits with
 the "Mithril" theme I guess.
 
 # The Store
@@ -17,7 +17,7 @@ and registered reducers that divide the responsibilities of creating a new
 state with every action based of the previous state.
 
 ```
-var setupStore = require('melkor').setupStore
+var setupStore = require('melcore').setupStore
 
 var store = setupStore({
 	'todos': {},
@@ -34,7 +34,7 @@ Reducers are done in such a way that they will not fail silently if
 you try to respond to an undefined action type.
 
 ```
-var setupReducer = require('melkor').setupReducer
+var setupReducer = require('melcore').setupReducer
 var constants = require('./constants')
 
 var todos = setupReducer()
@@ -55,7 +55,7 @@ module.exports = todos
 action attributes.
 
 ```
-var bindActionCreators = require('melkor').bindActionCreators
+var bindActionCreators = require('melcore').bindActionCreators
 var constants = require('./constants')
 var store = require('./store')
 
