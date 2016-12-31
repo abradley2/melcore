@@ -1,56 +1,43 @@
-var melcore = require('../../lib/melcore')
-var setupReducer = melcore.setupReducer
-var checkTypes = melcore.checkTypes
-var clone = melcore.clone
-var checkTypes = melcore.checkTypes
+const setupReducer = require('../../lib/melcore').setupReducer
+const constants = require('./constants')
+const CountActions = constants.CountActions
+const NameActions = constants.NameActions
 
-var constants = require('./constants')
-var CountActions = constants.CountActions
-var NameActions = constants.NameActions
-
-exports.count = setupReducer()
-	.on(CountActions.INCREMENT, function (oldState, action) {
-		var newState = oldState + 1
+exports.count = setupReducer('count')
+	.on('__INIT__', function () {
+		return 0
+	})
+	.on(CountActions.INCREMENT, function (action, oldState) {
+		const newState = oldState + 1
 
 		return newState
 	})
-	.on(CountActions.DECREMENT, function (oldState, action) {
-		var newState = oldState - 1
+	.on(CountActions.DECREMENT, function (action, oldState) {
+		const newState = oldState - 1
 
 		return newState
 	})
 	.create()
 
-exports.names = setupReducer()
-	.on(NameActions.ADD_NAME, function (oldState, action) {
-		var newState = clone(oldState)
-
-		checkTypes(action, {
-			name: String
-		})
-
-		newState.push(action.name)
+exports.names = setupReducer('names')
+	.on('__INIT__', function () {
+		return []
+	})
+	.on(NameActions.ADD_NAME, function (action, oldState) {
+		console.log('oldState = ', oldState)
+		const newState = oldState.concat([action.name])
 
 		return newState
 	})
-	.on(NameActions.EDIT_NAME, function (oldState, action) {
-		var newState = clone(oldState)
-
-		checkTypes(action, {
-			idx: Number,
-			name: String
-		})
+	.on(NameActions.EDIT_NAME, function (action, oldState) {
+		const newState = oldState.slice(0)
 
 		newState[action.idx] = action.name
 
 		return newState
 	})
-	.on(NameActions.REMOVE_NAME, function (oldState, action) {
-		var newState = clone(oldState)
-
-		checkTypes(action, {
-			idx: Number
-		})
+	.on(NameActions.REMOVE_NAME, function (action, oldState) {
+		const newState = oldState.slice(0)
 
 		newState.splice(action.idx, 1)
 
