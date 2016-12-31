@@ -1,20 +1,15 @@
 # Melcore
 
-Minimal Redux-ish implementation for Mithril.js, with middleware
-for handling asynchronous request via `m.request`
+Minimal Redux-ish implementation.
 
-I really just wanted a library like Redux, with a built in middleware for handling
-requests using `m.request`,
-and a nicer way to write reducers so it won't fail quietly when one of my
-constants are mistyped. Other than those couple of reasons, this may as well
-be titled "Discount knockoff-Redux". But "Melcore" sounds kewler and this fits with
-the "Mithril" theme I guess.
+I really just wanted something like Redux with a nicer way of creating reducers
+and setting up the store.
 
 # The Store
 
 A store is an object that contains a single atom of the application's state,
 and registered reducers that divide the responsibilities of creating a new
-state with every action based of the previous state.
+state with every action.
 
 ```
 const createStore = require('melcore').createStore
@@ -26,6 +21,13 @@ const store = setupStore([
 
 module.exports = store
 ```
+
+# Get State
+
+To retrieve the store's current state atom, call `store.getState()`. You can
+pass in a optional string to specify a getter.
+
+`store.getState('todos')` is equivalent to `store.getState().todos`
 
 # Reducers
 
@@ -56,13 +58,26 @@ module.exports = todos
 ```
 
 Melcore automatically dispatches an action of type `__INIT__` on store initialization.
-This is useful for setting up initial state. You may use the `__INIT__` consant
+This is useful for setting up initial state. You may use the `__INIT__` constant
 exported by Melcore, or just give it the string `"__INIT__"`
+
+`setupReducer` always takes a string as it's only argument. It specifies which piece of
+oldState it will receive from the store on every action, and which state it is
+expected to return on every handler.
+
+A reducer can also be a plain function that takes an action and the entire state atom
+its two arguments.
 
 # Dispatch
 
-To dispatch an action to the store, simply call it's `dispatch` method. All actions
+To dispatch an action to the store, simply call its `dispatch` method. All actions
 must have a `type` property- a string specifying the action to be handled.
+
+```
+store.dispatch({
+	type: 'DO_SOMETHING'
+})
+```
 
 # Action Creators
 
@@ -85,7 +100,7 @@ var module = {
 			}
 		}, store)
 	},
-	view: function () {
+	view: function (ctrl) {
 		var state = store.getState()
 
 		return m('div', [
@@ -95,8 +110,6 @@ var module = {
 		])
 	}
 }
-
-
 ```
 
 # Handling thunks
