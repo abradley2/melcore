@@ -22,6 +22,8 @@ const store = setupStore([
 module.exports = store
 ```
 
+The store has several functions: `dispatch`, `getState` and `bindActionCreators`
+
 # Get State
 
 To retrieve the store's current state atom, call `store.getState()`. You can
