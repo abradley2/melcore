@@ -102,6 +102,19 @@ or
 store.dispatch('DO_SOMETHING', {data: 'hello'})
 ```
 
+# Initialization
+
+Store gets it's initial state idiomatically by just dispatching an action agreed
+upon to be the "start" for your application. I prefer this as to increasing the
+function signature to setup reducers and the store like in redux.
+
+Calling `store.init()` will dispatch the `__INIT__` action to all reducers with
+no initial arguments. Do this on app start, and have each reducer return their
+initial state as a result of this action.
+
+Of course, you can always just define and use your own action string as the "init",
+rather than the built-in one.
+
 # Action Creators
 
 There is a `bindActionCreators` method which will have all functions of the map
