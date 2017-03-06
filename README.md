@@ -14,7 +14,7 @@ state with every action.
 ```
 const createStore = require('melcore').createStore
 
-const store = setupStore([
+const store = createStore([
 	require('./reducers/todos'),
 	require('./reducers/counts')
 ])

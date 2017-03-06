@@ -7,12 +7,12 @@ exports.count = setupReducer('count')
   .on('__INIT__', function () {
     return 0
   })
-  .on(CountActions.INCREMENT, function (action, oldState) {
+  .on(CountActions.INCREMENT, function (oldState, payload) {
     const newState = oldState + 1
 
     return newState
   })
-  .on(CountActions.DECREMENT, function (action, oldState) {
+  .on(CountActions.DECREMENT, function (oldState, payload) {
     const newState = oldState - 1
 
     return newState
@@ -23,22 +23,22 @@ exports.names = setupReducer('names')
   .on('__INIT__', function () {
     return []
   })
-  .on(NameActions.ADD_NAME, function (action, oldState) {
-    const newState = oldState.concat([action.name])
+  .on(NameActions.ADD_NAME, function (oldState, payload) {
+    const newState = oldState.concat([payload.name])
 
     return newState
   })
-  .on(NameActions.EDIT_NAME, function (action, oldState) {
+  .on(NameActions.EDIT_NAME, function (oldState, payload) {
     const newState = oldState.slice(0)
 
-    newState[action.idx] = action.name
+    newState[payload.idx] = payload.name
 
     return newState
   })
-  .on(NameActions.REMOVE_NAME, function (action, oldState) {
+  .on(NameActions.REMOVE_NAME, function (oldState, payload) {
     const newState = oldState.slice(0)
 
-    newState.splice(action.idx, 1)
+    newState.splice(payload.idx, 1)
 
     return newState
   })

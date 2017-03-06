@@ -15,14 +15,7 @@ describe('melcore', function () {
       reducers.names
     ])
 
-    store.setupReducer('message')
-      .on('__INIT__', function () {
-        return 'Hello World'
-      })
-      .on('message/EDIT_MESSAGE', function (newMessage) {
-        return newMessage
-      })
-      .create()
+    store.init()
   })
 
   it('should create a store', function () {
