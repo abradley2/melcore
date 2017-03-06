@@ -1,6 +1,6 @@
 {
   "name": "melcore",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Simple 'Redux-ish' functions for state management",
   "main": "./lib/melcore.js",
   "dependencies": {
@@ -9,10 +9,10 @@
   "devDependencies": {
     "chai": "^3.5.0",
     "mocha": "^2.5.3",
-    "sinon": "^1.17.6"
+    "standard": "^9.0.0"
   },
   "scripts": {
-    "test": "mocha"
+    "test": "standard && mocha"
   },
   "repository": {
     "type": "git",
@@ -27,5 +27,8 @@
   "bugs": {
     "url": "https://github.com/abradley2/melcore/issues"
   },
-  "homepage": "https://github.com/abradley2/melcore#readme"
+  "homepage": "https://github.com/abradley2/melcore#readme",
+  "standard": {
+    "globals": ["before", "beforeEach", "after", "afterEach", "it", "describe"]
+  }
 }

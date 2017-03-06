@@ -1,5 +1,4 @@
 const chai = require('chai')
-const sinon = require('sinon')
 
 const createStore = require('../lib/melcore').createStore
 const constants = require('./sut/constants')
@@ -8,58 +7,100 @@ const NameActions = constants.NameActions
 const CountActions = constants.CountActions
 
 describe('melcore', function () {
-	var store
+  var store
 
-	beforeEach(function () {
-		console.log('reducers = ', reducers)
-		store = createStore([
-			reducers.count,
-			reducers.names
-		])
-	})
+  beforeEach(function () {
+    store = createStore([
+      reducers.count,
+      reducers.names
+    ])
 
-	it('should create a store', function () {
-		chai.assert.isFunction(store.dispatch)
-		chai.assert.isFunction(store.getState)
-	})
+    store.setupReducer('message')
+      .on('__INIT__', function () {
+        return 'Hello World'
+      })
+      .on('message/EDIT_MESSAGE', function (newMessage) {
+        return newMessage
+      })
+      .create()
+  })
 
-	it('should be able to bind action creators', function () {
-		const actions = store.bindActionCreators({
-			add: function () {
-				return {
-					type: NameActions.ADD_NAME
-				}
-			},
-			edit: function () {
-				return {
-					type: NameActions.EDIT_NAME
-				}
-			},
-			remove: function () {
-				return {
-					type: NameActions.REMOVE_NAME
-				}
-			}
-		}, store)
+  it('should create a store', function () {
+    chai.assert.isFunction(store.dispatch)
+    chai.assert.isFunction(store.getState)
+  })
 
-		chai.assert.ok(actions)
-	})
+  it('should be able to bind action creators', function () {
+    const actions = store.bindActionCreators({
+      add: function () {
+        return {
+          type: NameActions.ADD_NAME
+        }
+      },
+      edit: function () {
+        return {
+          type: NameActions.EDIT_NAME
+        }
+      },
+      remove: function () {
+        return {
+          type: NameActions.REMOVE_NAME
+        }
+      }
+    }, store)
 
-	it('should dispatch action when bound creator called', function () {
-		const actions = store.bindActionCreators({
-			create: function (name) {
-				return {
-					type: NameActions.ADD_NAME,
-					name: name
-				}
-			}
-		}, store)
+    chai.assert.ok(actions)
+  })
 
-		actions.create('Tony')
+  it('should dispatch action when bound creator called', function () {
+    const actions = store.bindActionCreators({
+      create: function (name) {
+        return {
+          type: NameActions.ADD_NAME,
+          name: name
+        }
+      }
+    }, store)
 
-		const names = store.getState('names')
+    actions.create('Tony')
 
-		chai.assert.equal(names[names.length - 1], 'Tony')
-	})
+    const names = store.getState('names')
 
+    chai.assert.equal(names[names.length - 1], 'Tony')
+  })
+
+  it('should be able to dispatch an action', function () {
+    const initialCount = store.getState().count
+
+    store.dispatch({type: CountActions.INCREMENT})
+
+    chai.assert.equal(
+      store.getState().count,
+      initialCount + 1
+    )
+  })
+
+  it('should handle a thunk effect/action', function () {
+    const initialCount = store.getState().count
+
+    store.dispatch(function (dispatch) {
+      dispatch({type: CountActions.DECREMENT})
+    })
+
+    chai.assert.equal(
+      store.getState().count,
+      initialCount - 1
+    )
+  })
+
+  it('should be able to dispatch an action as a string', function () {
+    const initialCount = store.getState().count
+
+    store.dispatch(CountActions.INCREMENT)
+
+    chai.assert.equal(
+      store.getState().count,
+      initialCount + 1
+    )
+  })
 })
