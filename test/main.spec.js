@@ -15,6 +15,15 @@ describe('melcore', function () {
       reducers.names
     ])
 
+    store.setupReducer('message')
+      .on('__INIT__', function () {
+        return 'Hello World'
+      })
+      .on('message/EDIT_MESSAGE', function (oldState, newMessage) {
+        return newMessage
+      })
+      .create()
+
     store.init()
   })
 
@@ -94,6 +103,15 @@ describe('melcore', function () {
     chai.assert.equal(
       store.getState().count,
       initialCount + 1
+    )
+  })
+
+  it('should be able to use a reducer setup on the store', function () {
+    store.dispatch('message/EDIT_MESSAGE', 'It worked!')
+
+    chai.assert.equal(
+      store.getState().message,
+      'It worked!'
     )
   })
 })
