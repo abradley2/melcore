@@ -59,59 +59,71 @@ var todos = setupReducer('todos')
 module.exports = todos
 ```
 
-Melcore automatically dispatches an action of type `__INIT__` on store initialization.
-This is useful for setting up initial state. You may use the `__INIT__` constant
-exported by Melcore, or just give it the string `"__INIT__"`
-
 `setupReducer` always takes a string as it's only argument. It specifies which piece of
 oldState it will receive from the store on every action, and which state it is
 expected to return on every handler.
 
-A reducer can also be a plain function that takes an action and the entire state atom
-its two arguments.
+Instead of creating a reducer via `melcore.setupReducer` and adding it to the store's
+array of reducers, you can also call `setupReducer` directly on the store:
+
+```
+const store = require('./store')
+
+store.setupReducer('message')
+  .on('__INIT__', function () {
+    return 'Hello World!'
+  })
+  .on('message/editMessage', function (oldState, message) {
+    return message
+  })
+  .create()
+```
+
+The reducer will now be part of the store's main reducer. This is nice when
+you have a modular file structure and don't want to go back to edit your main
+`store.js` file every time you create a new module in your app.
 
 # Dispatch
 
-To dispatch an action to the store, simply call its `dispatch` method. All actions
-must have a `type` property- a string specifying the action to be handled.
+To dispatch an action to the store, simply call its `dispatch` method.
+
+These are two roughly equivalent way to dispatching actions:
 
 ```
 store.dispatch({
-	type: 'DO_SOMETHING'
+	type: 'DO_SOMETHING',
+  data: 'hello'
 })
+```
+
+or
+
+```
+store.dispatch('DO_SOMETHING', {data: 'hello'})
 ```
 
 # Action Creators
 
+There is a `bindActionCreators` method which will have all functions of the map
+dispatch their returned payload as actions.
+
+Mostly you should just use `store.dispatch` at the end of action creating methods.
+
 ```
 const constants = require('./constants')
-const store = require('./store')
+const getState = require('./store').getState
+const bindActionCreators = require('./store').bindActionCreators
 
-var module = {
-	controller: function () {
-		return store.bindActionCreators({
-			increment: function (e) {
-				return {
-					type: constants.INCREMENT
-				}
-			},
-			decrement: function (e) {
-				return {
-					type: constants.DECREMENT
-				}
-			}
-		}, store)
-	},
-	view: function (ctrl) {
-		var state = store.getState()
-
-		return m('div', [
-			m('h3', state.count),
-			m('button', { onclick: ctrl.increment }, '+'),
-			m('button', { onclick: ctrl.decrement }, '-')
-		])
-	}
-}
+const methods = bindActionCreators({
+  increment: function (e) {
+    return [constants.INCREMENT, 2]
+  },
+  decrement: function (e) {
+    return {
+      type: constants.DECREMENT
+    }
+  }
+})
 ```
 
 # Handling thunks
@@ -123,11 +135,36 @@ as the callback argument. This is useful for when an action is asynchronous.
 ```
 const store = require('./store')
 
-const actions = store.bindActionCreators({
-	somemthingAsync: function () {
-		return function (dispatch) {
-			m.request({ .. }).then(dispatch)
-		}
-	}
-})
+function getStuff (dispatch) {
+  m.request({ .. }).then(function (res) {
+    dispatch: {
+      type: 'GOT_STUFF',
+      stuff: res
+    }
+  })
+}
+
+store.dispatch( getStuff )
 ```
+
+# Middleware? Plugins?
+
+To add middleware, just add it as a reducer.
+
+Here's some "middleware" that logs the resulting state and action after
+all the other reducers have resolved:
+
+```
+function logAction (newState, action) {
+  console.log('action called!')
+  console.log(newState, action)
+  
+  return state
+}
+
+const store = createStore(
+  require('./reducers').concat([ logAction ])
+)
+```
+
+Keep in mind, reducers always need to return state.
