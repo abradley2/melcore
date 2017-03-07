@@ -15,6 +15,17 @@ describe('melcore', function () {
       reducers.names
     ])
 
+    store.setupReducer('person')
+      .on('__INIT__', function () {
+        return {
+          name: 'bob'
+        }
+      })
+      .on('person/SET_NAME', function (oldState, newName) {
+        return Object.assign({}, oldState, {name: newName})
+      })
+      .create()
+
     store.setupReducer('message')
       .on('__INIT__', function () {
         return 'Hello World'
@@ -32,49 +43,10 @@ describe('melcore', function () {
     chai.assert.isFunction(store.getState)
   })
 
-  it('should be able to bind action creators', function () {
-    const actions = store.bindActionCreators({
-      add: function () {
-        return {
-          type: NameActions.ADD_NAME
-        }
-      },
-      edit: function () {
-        return {
-          type: NameActions.EDIT_NAME
-        }
-      },
-      remove: function () {
-        return {
-          type: NameActions.REMOVE_NAME
-        }
-      }
-    }, store)
-
-    chai.assert.ok(actions)
-  })
-
-  it('should dispatch action when bound creator called', function () {
-    const actions = store.bindActionCreators({
-      create: function (name) {
-        return {
-          type: NameActions.ADD_NAME,
-          name: name
-        }
-      }
-    }, store)
-
-    actions.create('Tony')
-
-    const names = store.getState('names')
-
-    chai.assert.equal(names[names.length - 1], 'Tony')
-  })
-
   it('should be able to dispatch an action', function () {
     const initialCount = store.getState().count
 
-    store.dispatch({type: CountActions.INCREMENT})
+    store.dispatch(CountActions.INCREMENT)
 
     chai.assert.equal(
       store.getState().count,
@@ -86,23 +58,12 @@ describe('melcore', function () {
     const initialCount = store.getState().count
 
     store.dispatch(function (dispatch) {
-      dispatch({type: CountActions.DECREMENT})
+      dispatch(CountActions.DECREMENT)
     })
 
     chai.assert.equal(
       store.getState().count,
       initialCount - 1
-    )
-  })
-
-  it('should be able to dispatch an action as a string', function () {
-    const initialCount = store.getState().count
-
-    store.dispatch(CountActions.INCREMENT)
-
-    chai.assert.equal(
-      store.getState().count,
-      initialCount + 1
     )
   })
 
@@ -112,6 +73,33 @@ describe('melcore', function () {
     chai.assert.equal(
       store.getState().message,
       'It worked!'
+    )
+  })
+
+  it('should store previous state', function () {
+    store.dispatch(NameActions.ADD_NAME, {name: 'bob'})
+
+    chai.assert.isUndefined(
+      store.getPrev().names[0]
+    )
+
+    chai.assert.equal(
+      store.getState().names[0],
+      'bob'
+    )
+  })
+
+  it('should be able to do object comparison to tell if something changed', function () {
+    store.dispatch('person/SET_NAME', 'linda')
+
+    chai.assert.equal(
+      store.getPrev().names,
+      store.getState().names
+    )
+
+    chai.assert.notEqual(
+      store.getPrev().person,
+      store.getState().person
     )
   })
 })

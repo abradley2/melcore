@@ -1,9 +1,16 @@
 # Melcore
 
-Minimal Redux-ish implementation.
+Minimal Redux-ish implementation (just 100 lines of code).
 
 I really just wanted something like Redux with a nicer way of creating reducers
 and setting up the store.
+
+The api is also whittled down further. There's no dedicated way to add middleware,
+since you can just add additional "reducers" before and after. Pre-populating state is
+also done just by dispatching an "initialize" type action and having reducers form
+initial state from there. Also rather than the store having one reducer that is put
+together via "combineReducers", it is the default to just have the store take an array of
+reducers.
 
 # The Store
 
@@ -21,15 +28,16 @@ const store = createStore([
 
 module.exports = store
 ```
+(In the above example, the store is being passed an array of reducers. Alternatively,
+)
 
-The store has several functions: `dispatch`, `getState` and `bindActionCreators`
+The store has several functions: `dispatch`, `getState`, `getPrev`, and `setupReducer`
 
 # Get State
 
-To retrieve the store's current state atom, call `store.getState()`. You can
-pass in a optional string to specify a getter.
+To retrieve the store's current state atom, call `store.getState()`.
 
-`store.getState('todos')` is equivalent to `store.getState().todos`
+You can retrieve the store's state prior to the last dispatch call with `store.getPrev()`.
 
 # Reducers
 
@@ -42,7 +50,7 @@ const __INIT__ = require('melcore').__INIT__
 const setupReducer = require('melcore').setupReducer
 const constants = require('./constants')
 
-var todos = setupReducer('todos')
+const todos = setupReducer('todos')
 	.on(__INIT__, function () {
 		return []
 	})
@@ -104,40 +112,17 @@ store.dispatch('DO_SOMETHING', {data: 'hello'})
 
 # Initialization
 
-Store gets it's initial state idiomatically by just dispatching an action agreed
+The store gets it's initial state idiomatically by just dispatching an action agreed
 upon to be the "start" for your application. I prefer this as to increasing the
-function signature to setup reducers and the store like in redux.
+function signature to setup reducers and the store as Redux does.
 
 Calling `store.init()` will dispatch the `__INIT__` action to all reducers with
 no initial arguments. Do this on app start, and have each reducer return their
 initial state as a result of this action.
 
 Of course, you can always just define and use your own action string as the "init",
-rather than the built-in one.
-
-# Action Creators
-
-There is a `bindActionCreators` method which will have all functions of the map
-dispatch their returned payload as actions.
-
-Mostly you should just use `store.dispatch` at the end of action creating methods.
-
-```
-const constants = require('./constants')
-const getState = require('./store').getState
-const bindActionCreators = require('./store').bindActionCreators
-
-const methods = bindActionCreators({
-  increment: function (e) {
-    return [constants.INCREMENT, 2]
-  },
-  decrement: function (e) {
-    return {
-      type: constants.DECREMENT
-    }
-  }
-})
-```
+rather than the built-in one. `store.init()` is really just there to make this
+convention explicit.
 
 # Handling thunks
 _Won't you take me to... thunk-y toooown?_  
@@ -160,24 +145,29 @@ function getStuff (dispatch) {
 store.dispatch( getStuff )
 ```
 
-# Middleware? Plugins?
+# Mutating State
 
-To add middleware, just add it as a reducer.
+It is best practice to not mutate state inside a reducer. The state returned should
+be
+1. A new object containing no references that would be linked to previous state
+2. The previous state, untouched.
 
-Here's some "middleware" that logs the resulting state and action after
-all the other reducers have resolved:
+I highly recommend Icepick as a way to deal with this.
+There is also Facebooks Immutable.js library.
+
+# Plugins? Middleware?
+
+Just given how Melcore works, all you need is the ability to wrap the dispatch method.
+
+For convenience, `wrapDispatch` is provided for you on the store. Though you can just
+wrap the method as you would normally.
 
 ```
-function logAction (newState, action) {
-  console.log('action called!')
-  console.log(newState, action)
+store.wrapDispatch(function (dispatch, action, payload) {
+  console.log('this action is about to be dispatched: ', action)
   
-  return state
-}
-
-const store = createStore(
-  require('./reducers').concat([ logAction ])
-)
+  dispatch(action, payload)
+  
+  console.log('the new application state is: ', store.getState())
+})
 ```
-
-Keep in mind, reducers always need to return state.
