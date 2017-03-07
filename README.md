@@ -2,6 +2,8 @@
 
 Minimal Redux-ish implementation (just 100 lines of code).
 
+Use it with React, Inferno, Choo, Mithril, whatever really.
+
 I really just wanted something like Redux with a nicer way of creating reducers
 and setting up the store.
 

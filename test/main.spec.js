@@ -102,4 +102,18 @@ describe('melcore', function () {
       store.getState().person
     )
   })
+
+  it('should never have prev and current state be the same', function () {
+    chai.assert.notEqual(
+      store.getPrev(),
+      store.getState()
+    )
+
+    store.dispatch('noop')
+
+    chai.assert.notEqual(
+      store.getPrev(),
+      store.getState()
+    )
+  })
 })
