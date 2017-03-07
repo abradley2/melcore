@@ -97,20 +97,13 @@ you have a modular file structure and don't want to go back to edit your main
 
 To dispatch an action to the store, simply call its `dispatch` method.
 
-These are two roughly equivalent way to dispatching actions:
-
 ```
-store.dispatch({
-	type: 'DO_SOMETHING',
-  data: 'hello'
-})
+store.dispatch('ACTION_NAME', {data: 'stuff'})
 ```
 
-or
+The second argument to dispatch (optional) is which whatever payload you
+wish to send as part of that action.
 
-```
-store.dispatch('DO_SOMETHING', {data: 'hello'})
-```
 
 # Initialization
 
@@ -154,8 +147,8 @@ be
 1. A new object containing no references that would be linked to previous state
 2. The previous state, untouched.
 
-I highly recommend Icepick as a way to deal with this.
-There is also Facebooks Immutable.js library.
+I highly recommend [Icepick](https://github.com/aearly/icepick) as a way to deal with this.
+[Immutable.js](https://github.com/facebook/immutable-js) is very good as well.
 
 # Plugins? Middleware?
 

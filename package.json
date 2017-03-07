@@ -1,6 +1,6 @@
 {
   "name": "melcore",
-  "version": "4.0.0",
+  "version": "4.0.1",
   "description": "Simple 'Redux-ish' functions for state management",
   "main": "./lib/melcore.js",
   "dependencies": {
