@@ -17,7 +17,6 @@ exports.count = setupReducer('count')
 
     return newState
   })
-  .create()
 
 exports.names = setupReducer('names')
   .on('__INIT__', function () {
@@ -42,4 +41,3 @@ exports.names = setupReducer('names')
 
     return newState
   })
-  .create()

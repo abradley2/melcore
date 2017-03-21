@@ -24,7 +24,6 @@ describe('melcore', function () {
       .on('person/SET_NAME', function (oldState, newName) {
         return Object.assign({}, oldState, {name: newName})
       })
-      .create()
 
     store.setupReducer('noop')
       .on('__INIT__', function () {
@@ -33,7 +32,6 @@ describe('melcore', function () {
       .on('noop', function (oldState) {
         return oldState
       })
-      .create()
 
     store.setupReducer('message')
       .on('__INIT__', function () {
@@ -42,7 +40,6 @@ describe('melcore', function () {
       .on('message/EDIT_MESSAGE', function (oldState, newMessage) {
         return newMessage
       })
-      .create()
 
     store.init()
   })
