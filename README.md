@@ -64,7 +64,6 @@ const todos = setupReducer('todos')
 			return todo.id !== action.targetId
 		})
 	})
-	.create()
 
 module.exports = todos
 ```
@@ -86,7 +85,6 @@ store.setupReducer('message')
   .on('message/editMessage', function (oldState, message) {
     return message
   })
-  .create()
 ```
 
 The reducer will now be part of the store's main reducer. This is nice when
@@ -95,7 +93,7 @@ you have a modular file structure and don't want to go back to edit your main
 
 # Dispatch
 
-To dispatch an action to the store, simply call its `dispatch` method.
+To dispatch an action to the store, simply call it's `dispatch` method.
 
 ```
 store.dispatch('ACTION_NAME', {data: 'stuff'})
