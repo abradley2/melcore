@@ -15,6 +15,15 @@ describe('melcore', function () {
       reducers.names
     ])
 
+    store.registerReducer = (function (func) {
+      function wrapper () {
+        wrapper.callCount++
+        return func.apply(store, arguments)
+      }
+      wrapper.callCount = 0
+      return wrapper
+    })(store.registerReducer)
+
     store.setupReducer('person')
       .on('__INIT__', function () {
         return {
@@ -47,6 +56,10 @@ describe('melcore', function () {
   it('should create a store', function () {
     chai.assert.isFunction(store.dispatch)
     chai.assert.isFunction(store.getState)
+  })
+
+  it('should have called registerReducer three times', function () {
+    chai.assert.equal(store.registerReducer.callCount, 3)
   })
 
   it('should be able to dispatch an action', function () {
