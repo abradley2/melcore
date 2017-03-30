@@ -42,7 +42,7 @@ describe('melcore', function () {
         return oldState
       })
 
-    store.setupReducer('message')
+    store.createReducer('message')
       .on('__INIT__', function () {
         return 'Hello World'
       })

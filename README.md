@@ -33,7 +33,7 @@ module.exports = store
 (In the above example, the store is being passed an array of reducers. Alternatively,
 )
 
-The store has several functions: `dispatch`, `getState`, `getPrev`, and `setupReducer`
+The store has several functions: `dispatch`, `getState`, `getPrev`, and `createReducer`
 
 # Get State
 
@@ -49,10 +49,10 @@ statement since you may accidentally misspell a constant and `case` won't care
 
 ```
 const __INIT__ = require('melcore').__INIT__
-const setupReducer = require('melcore').setupReducer
+const createReducer = require('melcore').createReducer
 const constants = require('./constants')
 
-const todos = setupReducer('todos')
+const todos = createReducer('todos')
 	.on(__INIT__, function () {
 		return []
 	})
@@ -68,17 +68,17 @@ const todos = setupReducer('todos')
 module.exports = todos
 ```
 
-`setupReducer` always takes a string as it's only argument. It specifies which piece of
+`createReducer` always takes a string as its only argument. It specifies which piece of
 oldState it will receive from the store on every action, and which state it is
 expected to return on every handler.
 
-Instead of creating a reducer via `melcore.setupReducer` and adding it to the store's
-array of reducers, you can also call `setupReducer` directly on the store:
+Instead of creating a reducer via `melcore.createReducer` and adding it to the store's
+array of reducers, you can also call `createReducer` directly on the store:
 
 ```
 const store = require('./store')
 
-store.setupReducer('message')
+store.createReducer('message')
   .on('__INIT__', function () {
     return 'Hello World!'
   })
