@@ -1,6 +1,6 @@
 {
   "name": "melcore",
-  "version": "5.0.3",
+  "version": "5.0.4",
   "description": "Simple 'Redux-ish' functions for state management",
   "main": "./lib/melcore.js",
   "dependencies": {
@@ -23,7 +23,7 @@
     "redux"
   ],
   "author": "Tony Bradley",
-  "license": "MIT",
+  "license": "Unlicense",
   "bugs": {
     "url": "https://github.com/abradley2/melcore/issues"
   },
